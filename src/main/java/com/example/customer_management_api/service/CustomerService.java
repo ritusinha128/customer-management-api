@@ -87,5 +87,39 @@ public class CustomerService {
 		return true;
 		*/
 	}
+	
+	public Customer purchase (long id, double purchaseAmount) {
+		Optional<Customer> customer = customerRepository.findById(id);
+		if (customer.isEmpty()) {
+			return null;
+		}
+		Customer cust = customer.get();
+		cust.setTotalSales(cust.getTotalSales() + purchaseAmount);
+		customerRepository.save(cust);
+		return cust;
+	}
+	
+	public Customer purchaseWithCredit (long id, double purchaseAmount) {
+		Optional<Customer> customer = customerRepository.findById(id);
+		if (customer.isEmpty()) {
+			return null;
+		}
+		Customer cust = customer.get();
+		cust.setTotalSales(cust.getTotalSales() + purchaseAmount);
+		cust.setBalanceDue(cust.getBalanceDue() + purchaseAmount);
+		customerRepository.save(cust);
+		return cust;
+	}
+	
+	public Customer makePayment (long id, double payment) {
+		Optional<Customer> customer = customerRepository.findById(id);
+		if (customer.isEmpty()) {
+			return null;
+		}
+		Customer cust = customer.get();
+		cust.setBalanceDue(cust.getBalanceDue() - payment);
+		customerRepository.save(cust);
+		return cust;
+	}
 
 }

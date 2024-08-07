@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.customer_management_api.service.CustomerService;
@@ -48,6 +49,21 @@ public class CustomerController {
 	@DeleteMapping("/{id}")
 	public boolean deleteCustomer(@PathVariable long id) {
 		return customerService.deleteCustomer(id);
+	}
+	
+	@PutMapping("/purchase/{id}")
+	public Customer purchase(@PathVariable long id, @RequestParam(name = "purchase", defaultValue="0.0") double purchase) {
+		return customerService.purchase(id, purchase);
+	}
+	
+	@PutMapping("/purchase/credit/{id}")
+	public Customer purchaseWithCredit(@PathVariable long id, @RequestParam(name = "purchase", defaultValue="0.0") double purchase) {
+		return customerService.purchaseWithCredit(id, purchase);
+	}
+	
+	@PutMapping("/payment/{id}")
+	public Customer makePayment(@PathVariable long id, @RequestParam(name = "payment", defaultValue="0.0") double payment) {
+		return customerService.makePayment(id, payment);
 	}
 
 }
