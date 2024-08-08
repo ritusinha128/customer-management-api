@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.example.customer_management_api.entity.*;
@@ -88,10 +89,13 @@ public class CustomerService {
 		*/
 	}
 	
-	public Customer purchase (long id, double purchaseAmount) {
+	public Object purchase (long id, double purchaseAmount) {
+		if (purchaseAmount < 0) {
+			return new CustomErrorMessage("Purchase amount must be greater than or equal to zero", HttpStatus.BAD_REQUEST.value());
+		}
 		Optional<Customer> customer = customerRepository.findById(id);
 		if (customer.isEmpty()) {
-			return null;
+            return new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
 		}
 		Customer cust = customer.get();
 		cust.setTotalSales(cust.getTotalSales() + purchaseAmount);
@@ -99,10 +103,14 @@ public class CustomerService {
 		return cust;
 	}
 	
-	public Customer purchaseWithCredit (long id, double purchaseAmount) {
+	public Object purchaseWithCredit (long id, double purchaseAmount) {
+		if (purchaseAmount < 0) {
+			return new CustomErrorMessage("Purchase amount must be greater than or equal to zero", HttpStatus.BAD_REQUEST.value());
+		}
 		Optional<Customer> customer = customerRepository.findById(id);
 		if (customer.isEmpty()) {
-			return null;
+            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
+			return errorResponse;
 		}
 		Customer cust = customer.get();
 		cust.setTotalSales(cust.getTotalSales() + purchaseAmount);
@@ -111,12 +119,16 @@ public class CustomerService {
 		return cust;
 	}
 	
-	public Customer makePayment (long id, double payment) {
+	public Object makePayment (long id, double payment) {
 		Optional<Customer> customer = customerRepository.findById(id);
 		if (customer.isEmpty()) {
-			return null;
+			CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
+			return errorResponse;
 		}
 		Customer cust = customer.get();
+		if (payment > cust.getBalanceDue()) {
+			return new CustomErrorMessage("Making a payment greater than your due balance is not permitted", HttpStatus.BAD_REQUEST.value());
+		}
 		cust.setBalanceDue(cust.getBalanceDue() - payment);
 		customerRepository.save(cust);
 		return cust;

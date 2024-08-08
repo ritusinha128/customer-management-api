@@ -72,34 +72,34 @@ public class CustomerController {
 	
 	@PutMapping("/purchase/{id}")
 	public ResponseEntity<?> purchase(@PathVariable long id, @RequestParam(name = "purchase", defaultValue="0.0") double purchase) {
-		Customer customer = customerService.purchase(id, purchase);
-		if (customer == null) {
-            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+		Object resp = customerService.purchase(id, purchase);
+		if (resp instanceof Customer) {
+            return ResponseEntity.ok((Customer) resp);
         } else {
-            return ResponseEntity.ok(customer);
+        	CustomErrorMessage errorResponse = (CustomErrorMessage) resp;
+            return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
         }
 	}
 	
 	@PutMapping("/purchase/credit/{id}")
 	public ResponseEntity<?> purchaseWithCredit(@PathVariable long id, @RequestParam(name = "purchase", defaultValue="0.0") double purchase) {
-		Customer customer = customerService.purchaseWithCredit(id, purchase);
-		if (customer == null) {
-            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+		Object resp = customerService.purchaseWithCredit(id, purchase);
+		if (resp instanceof Customer) {
+			return ResponseEntity.ok((Customer) resp);
         } else {
-            return ResponseEntity.ok(customer);
+        	CustomErrorMessage errorResponse = (CustomErrorMessage) resp;
+            return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
         }
 	}
 	
 	@PutMapping("/payment/{id}")
 	public ResponseEntity<?> makePayment(@PathVariable long id, @RequestParam(name = "payment", defaultValue="0.0") double payment) {
-		Customer customer = customerService.makePayment(id, payment);
-		if (customer == null) {
-            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+		Object resp = customerService.makePayment(id, payment);
+		if (resp instanceof Customer) {
+			return ResponseEntity.ok((Customer) resp);
         } else {
-            return ResponseEntity.ok(customer);
+        	CustomErrorMessage errorResponse = (CustomErrorMessage) resp;
+            return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
         }
 	}
 
