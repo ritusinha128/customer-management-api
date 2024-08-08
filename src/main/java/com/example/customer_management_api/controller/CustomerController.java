@@ -32,8 +32,14 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Customer>> getCustomer(@PathVariable long id) {
-		return new ResponseEntity<Optional<Customer>>(customerService.getCustomer(id), HttpStatus.OK);
+	public ResponseEntity<?> getCustomer(@PathVariable long id) {
+		Customer customer = customerService.getCustomer(id);
+		if (customer == null) {
+            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
+            return ResponseEntity.ok(customer);
+        }
 	}
 	
 	@PostMapping("")
@@ -42,28 +48,59 @@ public class CustomerController {
 	}
 	
 	@PutMapping("/{id}")
-	public Customer editCustomer(@PathVariable long id, @RequestBody Customer cust) {
-		return customerService.updateCustomer(id, cust);
+	public ResponseEntity<?> editCustomer(@PathVariable long id, @RequestBody Customer cust) {
+		Customer customer = customerService.updateCustomer(id, cust);
+		if (customer == null) {
+            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
+            return ResponseEntity.ok(customer);
+        }
 	}
 	
 	@DeleteMapping("/{id}")
-	public boolean deleteCustomer(@PathVariable long id) {
-		return customerService.deleteCustomer(id);
+	public ResponseEntity<CustomErrorMessage> deleteCustomer(@PathVariable long id) {
+		boolean resp = customerService.deleteCustomer(id);
+		if (!resp) {
+			CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+		} else {
+			CustomErrorMessage response = new CustomErrorMessage("Customer deleted", HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+		}
 	}
 	
 	@PutMapping("/purchase/{id}")
-	public Customer purchase(@PathVariable long id, @RequestParam(name = "purchase", defaultValue="0.0") double purchase) {
-		return customerService.purchase(id, purchase);
+	public ResponseEntity<?> purchase(@PathVariable long id, @RequestParam(name = "purchase", defaultValue="0.0") double purchase) {
+		Customer customer = customerService.purchase(id, purchase);
+		if (customer == null) {
+            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
+            return ResponseEntity.ok(customer);
+        }
 	}
 	
 	@PutMapping("/purchase/credit/{id}")
-	public Customer purchaseWithCredit(@PathVariable long id, @RequestParam(name = "purchase", defaultValue="0.0") double purchase) {
-		return customerService.purchaseWithCredit(id, purchase);
+	public ResponseEntity<?> purchaseWithCredit(@PathVariable long id, @RequestParam(name = "purchase", defaultValue="0.0") double purchase) {
+		Customer customer = customerService.purchaseWithCredit(id, purchase);
+		if (customer == null) {
+            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
+            return ResponseEntity.ok(customer);
+        }
 	}
 	
 	@PutMapping("/payment/{id}")
-	public Customer makePayment(@PathVariable long id, @RequestParam(name = "payment", defaultValue="0.0") double payment) {
-		return customerService.makePayment(id, payment);
+	public ResponseEntity<?> makePayment(@PathVariable long id, @RequestParam(name = "payment", defaultValue="0.0") double payment) {
+		Customer customer = customerService.makePayment(id, payment);
+		if (customer == null) {
+            CustomErrorMessage errorResponse = new CustomErrorMessage("Customer not found", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else {
+            return ResponseEntity.ok(customer);
+        }
 	}
 
 }

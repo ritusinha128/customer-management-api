@@ -25,8 +25,8 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 	
-	public Optional<Customer> getCustomer(long id){
-		return customerRepository.findById(id);
+	public Customer getCustomer(long id){
+		return customerRepository.findById(id).orElse(null);
 		/*
 		for (Customer customer : customers) {
 			if (customer.getId() == id) {

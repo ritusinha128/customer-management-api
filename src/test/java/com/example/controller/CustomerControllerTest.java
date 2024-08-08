@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.example.customer_management_api.controller.CustomerController;
+import com.example.customer_management_api.entity.CustomErrorMessage;
 import com.example.customer_management_api.entity.Customer;
 import com.example.customer_management_api.service.CustomerService;
 
@@ -54,11 +55,11 @@ public class CustomerControllerTest {
 	
 	@Test
 	public void testGetCustomerById() {
-		when(customerService.getCustomer((long)1)).thenReturn(Optional.of(customers.get(0)));
-		ResponseEntity<Optional<Customer>> response = customerController.getCustomer((long)1);
+		when(customerService.getCustomer((long)1)).thenReturn(customers.get(0));
+		ResponseEntity<?> response = customerController.getCustomer((long)1);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
-		Optional<Customer> cust = response.getBody();
-		assertEquals(cust.get(), customers.get(0));
+		Customer cust = (Customer) response.getBody();
+		assertEquals(cust, customers.get(0));
 		verify(customerService).getCustomer((long)1);
 	}
 	
@@ -75,16 +76,17 @@ public class CustomerControllerTest {
 		Customer c = customers.get(0);
 		c.setName("Ritu Sinha");
 		when(customerService.updateCustomer((long)1, c)).thenReturn(c);
-		Customer cust = customerController.editCustomer((long)1, c);
-		assertEquals(cust, c);
+		ResponseEntity<?> resp = customerController.editCustomer((long)1, c);
+		assertEquals(resp.getStatusCode(), HttpStatus.OK);
+		assertEquals((Customer)resp.getBody(), c);
 		verify(customerService).updateCustomer((long)1, c);
 	}
 	
 	@Test
 	public void testDeleteCustomer() {
 		when(customerService.deleteCustomer((long)1)).thenReturn(true);
-		boolean res = customerController.deleteCustomer((long)1);
-		assertEquals(res, true);
+		ResponseEntity<CustomErrorMessage>res = customerController.deleteCustomer((long)1);
+		assertEquals(res.getBody().getMessage(), "Customer deleted");
 		verify(customerService).deleteCustomer((long)1);
 	}
 	

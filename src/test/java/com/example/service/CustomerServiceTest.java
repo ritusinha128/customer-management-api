@@ -55,9 +55,9 @@ public class CustomerServiceTest {
 	@Test
 	public void testGetCustomerById() {
 		when(customerRepository.findById((long) 1)).thenReturn(Optional.of(customers.get(0)));
-		Optional<Customer> customer = customerService.getCustomer(1);
-		assertNotNull(customer.get());
-		assertEquals(customer.get(), customers.get(0));
+		Customer customer = customerService.getCustomer(1);
+		assertNotNull(customer);
+		assertEquals(customer, customers.get(0));
 		verify(customerRepository).findById((long)1);
 	}
 	
