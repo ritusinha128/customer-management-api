@@ -70,8 +70,8 @@ public class CustomerControllerTest {
 	@Test
 	public void testCreateCustomer() {
 		when(customerService.createCustomer(customers.get(0))).thenReturn(customers.get(0));
-		Customer response = customerController.createCustomer(customers.get(0));
-		assertEquals(response, customers.get(0));
+		ResponseEntity<?> response = customerController.createCustomer(customers.get(0));
+		assertEquals(response.getBody(), customers.get(0));
 		verify(customerService).createCustomer(customers.get(0));
 	}
 	

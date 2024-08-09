@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.customer_management_api.entity.*;
@@ -18,6 +19,10 @@ public class CustomerService {
 	
 	@Autowired
 	CustomerRepository customerRepository;
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
+    
 	
 	public CustomerService() {
 	}
@@ -42,6 +47,11 @@ public class CustomerService {
 		//customer.setId(id++);
 		//Customer newCustomer = new Customer(id++, name);
 		//customers.add(customer);
+		Optional<Customer> cust = customerRepository.findByName(customer.getName());
+		if (cust.isPresent()) {
+			return null;
+		}
+		customer.encryptPassword(passwordEncoder);
 		customerRepository.save(customer);
 		return customer;
 	}

@@ -1,6 +1,11 @@
 package com.example.customer_management_api.entity;
 
+import java.util.Collection;
 import java.util.Objects;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,12 +28,24 @@ public class Customer {
 	@Column(name="balance_due")
 	private double balanceDue;
 	
+	@Column(name="username")
+	private String username;
+	
+	@Column(name="password")
+    private String password;
+	
 	public Customer() {
 	}
+	
+	
+	public void encryptPassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
 	
 	public Customer(long id, String name) {
 		this.id = id;
 		this.name = name;
+		this.username = name.toLowerCase();
 	}
 	
 	public long getId() {
@@ -42,6 +59,7 @@ public class Customer {
 	}
 	public void setName(String name) {
 		this.name = name;
+		this.username = name.toLowerCase();
 	}
 
 	@Override
@@ -75,6 +93,22 @@ public class Customer {
 
 	public void setBalanceDue(double balanceDue) {
 		this.balanceDue = balanceDue;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

@@ -43,8 +43,15 @@ public class CustomerController {
 	}
 	
 	@PostMapping("")
-	public Customer createCustomer(@RequestBody Customer cust) {
-		return customerService.createCustomer(cust);
+	public ResponseEntity<?> createCustomer(@RequestBody Customer cust) {
+		//System.out.println("customer password:" + cust.getPassword());
+		Customer customer =customerService.createCustomer(cust);
+		if (customer == null) {
+			CustomErrorMessage errorResponse = new CustomErrorMessage("Customer exists", HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+		} else {
+			return ResponseEntity.ok(customer);
+		}
 	}
 	
 	@PutMapping("/{id}")

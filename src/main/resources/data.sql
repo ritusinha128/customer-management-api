@@ -1,3 +1,3 @@
-INSERT INTO customer (name, total_sales, balance_due) VALUES ('John Doe', 0.0, 0.0);
-INSERT INTO customer (name, total_sales, balance_due) VALUES ('Jane Adams', 0.0, 0.0);
-INSERT INTO customer (name, total_sales, balance_due) VALUES ('Alice Jones', 0.0, 0.0);
+INSERT INTO customer (name, total_sales, balance_due, username, password) VALUES ('John Doe', 0.0, 0.0, 'john doe', '$2a$10$4nDkAQFLAHINQmzFZZpKV.AprBQyTtFn39jX9Q4XGAcJj5uDkUnnS');
+INSERT INTO customer (name, total_sales, balance_due, username, password) VALUES ('Jane Adams', 0.0, 0.0, 'jane adams', '$2a$10$4nDkAQFLAHINQmzFZZpKV.AprBQyTtFn39jX9Q4XGAcJj5uDkUnnS');
+INSERT INTO customer (name, total_sales, balance_due, username, password) VALUES ('Alice Jones', 0.0, 0.0, 'alice jones', '$2a$10$4nDkAQFLAHINQmzFZZpKV.AprBQyTtFn39jX9Q4XGAcJj5uDkUnnS');

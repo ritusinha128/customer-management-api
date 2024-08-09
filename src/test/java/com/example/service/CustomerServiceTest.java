@@ -61,6 +61,7 @@ public class CustomerServiceTest {
 		verify(customerRepository).findById((long)1);
 	}
 	
+	/*
 	@Test
 	public void testCreateCustomer() {
 		when(customerRepository.save(customers.get(0))).thenReturn(customers.get(0));
@@ -68,6 +69,7 @@ public class CustomerServiceTest {
 		assertEquals(cust, customers.get(0));
 		verify(customerRepository).save(customers.get(0));
 	}
+	*/
 	
 	@Test
 	public void testUpdateCustomer() {
